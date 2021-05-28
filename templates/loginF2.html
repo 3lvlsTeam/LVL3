@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+<!-- title block------------------------------------------------------------>
+
+{% block title %}
+LOG IN
+{% endblock %}
+
+<!--style block-------------------------------------------------------------->
+{% block style%}
+<style>
+    .login_nav_a{   
+        font:bold;
+        color: black  !important;
+    }
+</style>
+{% endblock %}
+
+<!-- body block-------------------------------------------------------------->
+{% block body %}
+<form class="input_form" action="" method="POST">
+    <h2>Login<samp style="font-size:medium; float:right" >Step 2</samp></h2>
+    <hr>
+    <h4>Click the photos in the right order :</h4>
+    <br>
+    <div class="imgs_div">
+        {%for i in imgs_list:%}
+            <input style="background-image: url({{directory}}/{{i}});" class="img_button" id="{{i}}" type="button" value=" " onclick="give_numper('{{i}}')" >
+        {%endfor%}
+    </div>
+    <br><hr><br>
+    <div class="buttons_div">
+        <input style="visibility: hidden;" type="password" id="img_password" name="img_password">
+        <input type="submit" value="Login" class="btn btn-lg btn-primary" >
+        <input type="button" class="btn btn-secondary btn-lg" value="Refresh" onclick="refresh()">
+    </div>
+    
+</form>
+{% endblock %}
+
+<!--scripts block ------------------------------------------------------------>
+
+{% block script %}
+<script>
+    var counter=1
+    function refresh(){location.reload();}
+    function give_numper(id){
+        if (document.getElementById(id).value == " "){
+        document.getElementById(id).value=counter;
+        document.getElementById(id).style.opacity=0.7;
+        document.getElementById("img_password").value=document.getElementById("img_password").value+id;
+        counter++;
+        }
+    }
+</script>
+{% endblock%}

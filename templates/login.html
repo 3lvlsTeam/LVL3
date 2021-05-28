@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+<!-- title block------------------------------------------------------------>
+
+{% block title %}
+LOG IN
+{% endblock %}
+
+<!--style block-------------------------------------------------------------->
+{% block style%}
+<style>
+ .login_nav_a{   
+    font:bold;
+    color: black  !important;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+<!-- body block-------------------------------------------------------------->
+{% block body %}
+
+<form class="input_form" action="" method="POST">
+    <h2>Log in <samp style="font-size:medium; float:right" > Step 1</samp></h2>
+    <hr>
+   
+    <div class="mb-3">
+      <label for="username" class="form-label">Username </label>
+      <input type="text" class="form-control" id="username" aria-describedby="emailHelp" name="username" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="mb-3 form-check">
+      <input type="checkbox" onclick="password_to_text()" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Show password</label>
+    </div>
+    
+    <div class="mb-3 form-check">
+        <input type="checkbox"  class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Remember me</label>
+    </div>  
+
+    <button type="submit" class="float-end btn btn-primary">Login</button><br><br>
+<hr>
+    <span style="font-size:small;">Dont have an account? <a href="signup" class="navbar-brand" style="font-size:small; color:#888;"> Sign Up Now!</a> </span>
+
+</form>
+{% endblock %}
+
+<!--scripts block ------------------------------------------------------------>
+
+{% block script %}
+<script>
+
+    
+    function password_to_text(){
+    
+    var pw = document.getElementById("password");
+    
+    if (pw.type === "password") {
+      pw.type = "text";
+    } else {
+      pw.type = "password";
+    }
+    }
+</script>
+{% endblock%}

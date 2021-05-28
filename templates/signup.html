@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+<!-- title block------------------------------------------------------------>
+
+{% block title %}
+SIGN UP
+{% endblock %}
+
+<!--style block-------------------------------------------------------------->
+{% block style%}
+<style>
+.signup_nav_a{
+      font:bold;
+      color: black  !important;
+}
+</style>
+{% endblock %}
+
+<!-- body block-------------------------------------------------------------->
+{% block body %}
+
+<form class="row g-3 input_form" action="" method="POST">
+    <h2>Sign up <samp style="font-size:medium; float:right" > Step 1</samp> </h2>
+    <hr>
+    
+    <div class="col-md-6">
+        <label for="input_firstname"  class="form-label">First name</label>
+        <input type="text" class="form-control"   name="input_firstname" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="input_lastname" class="form-label">Last name</label>
+        <input type="text" class="form-control" required name="input_lastname">
+      </div> 
+
+      <div class="col-12">
+        <label for="input_username" class="form-label" >Username</label>
+        <div class="input-group">
+          <div class="input-group-text">@</div>
+          <input type="text" class="form-control" id="input_username" required name="input_username">
+        </div>
+      </div>
+    
+      <div class="col-12">
+        <label for="input_email" class="form-label" >Email Address</label>
+        <div class="input-group">
+          <input type="email" class="form-control" id="input_email" required name="input_email">
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-12">
+      <label for="input_birthdate" class="form-label" >Birth date</label>
+      <div class="input-group">
+        <input type="date" class="form-control" id="input_birthdate" min="1900-01-01"  required name="input_birthdate">
+      </div>
+    </div>
+  </div>
+        
+    <div class="col-md-6">
+      <label for="input_password1" class="form-label" >Password</label>
+      <input type="password" class="form-control" name="input_password1" id="input_password1" minlength="12" required>
+    </div>
+    
+    <div class="col-md-6">
+      <label for="input_password2" class="form-label">Confirm password</label>
+      <input type="password" class="form-control" id="input_password2" name="input_password2" minlength="12" required>
+    </div>
+    
+    <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck" onclick="password_to_text()">
+          <label class="form-check-label" for="gridCheck">
+              <p>Show password </p>
+          </label>
+            <br>
+            <span style="font-size:small;">Having troubles with the password ? <a href="pwgen" class="navbar-brand" style="font-size:x-small; color:#888;" target="blank"> Click here</a> </span>
+        </div>
+    </div>
+
+    
+    <div class="col-12">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="gridCheck" required>
+        <label class="form-check-label" for="gridCheck">
+            <p>I accept the <a href="">Terms and Conditions</a></p>
+    </label>
+      </div>
+      <hr>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="float-end btn btn-primary">Sign up</button>
+    </div>
+  </form>
+
+
+{% endblock %}
+
+<!--scripts block ------------------------------------------------------------>
+
+{% block script %}
+<script>
+
+    
+    function password_to_text(){
+    
+        var pw1 = document.getElementById("input_password1");
+        var pw2 = document.getElementById("input_password2");
+
+        
+        if (pw1.type === "password") {
+          pw1.type = "text";
+          pw2.type = "text";
+        } else {
+          pw1.type = "password";
+          pw2.type = "password";
+        }
+        }
+
+</script>
+{% endblock%}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+<!-- title block------------------------------------------------------------>
+
+{% block title %}
+PW GEN
+{% endblock %}
+
+<!--style block-------------------------------------------------------------->
+{% block style%}
+
+{% endblock %}
+
+<!-- body block-------------------------------------------------------------->
+{% block body %}
+<form class="input_form" action="" method="POST">
+    
+<h2>
+    Password generator
+</h2>
+<hr>
+
+    <div class="mb-3">
+        <label for="input_gen_numbers" class="form-label">Enter two numbers </label>
+        <input type="text" class="form-control" id="input_gen_numbers" name="input_gen_numbers" minlength="2" maxlength="2" required>
+    </div>
+    <div class="mb-3">
+        <label for="input_gen_text" class="form-label">Enter at lest 8 words sentence that you can't forget</label>
+        <input type="text" class="form-control" id="input_gen_text" name="input_gen_text" required>
+    </div>
+    <br>
+
+    <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck" required>
+          <label class="form-check-label" for="gridCheck" style=" font-size:small ;">
+              <p>I accept and understand thet this data will be used to generate my password </p>
+      </label>
+        </div>
+        <hr>
+      </div>
+      
+      <div class="input-group mb-3">
+        <button type="submit" class="btn btn-primary">Generate</button><br><br>
+        <button class="btn btn-outline-secondary" type="button" onclick="copy_text()" >Copy </button>
+        <input type="text" class="form-control" placeholder=" Your paswword will be generated here ." id="gen_password" name="gen_password" value="{{gen_password if gen_password }}"">
+        
+      </div>  
+
+</form>
+
+{% endblock %}
+
+<!--scripts block ------------------------------------------------------------>
+
+{% block script %}
+<script>
+  function copy_text() {
+    /* Get the text field */
+    var copyText = document.getElementById("gen_password");
+  
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  
+  }
+</script>
+{% endblock%}

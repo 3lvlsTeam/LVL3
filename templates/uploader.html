@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+<!-- title block------------------------------------------------------------>
+
+{% block title %} LOG IN {% endblock %}
+
+<!--style block-------------------------------------------------------------->
+{% block style%}
+<style>
+    .login_nav_a {
+        font: bold;
+        color: black !important;
+    }
+</style>
+{% endblock %}
+
+<!-- body block-------------------------------------------------------------->
+{% block body %}
+<form class="input_form" method="post" action="" enctype="multipart/form-data">
+    <h2> second level authentication <samp style="font-size:medium; float:right">Uploading Custom images</samp></h2>
+    <hr>
+    <h5>Your images :</h5>
+    <p>hint:If you want to remove an image press on it</p>
+    <div class="imgs_div">
+        {%for i in imgs_list:%}
+        <div onclick="remove('{{i}}')" id="{{i}}" style="background-image: url({{directory}}/{{i}});" class="img_button">
+            <div class="close">X</div>
+        </div> {%endfor%}
+    </div>
+    <h4>Select an image to upload</h4>
+    <input multiple type="file" name="files[]" class="form-control" autocomplete="off" required>
+    <br><input type="submit" value="Upload" class="btn btn-lg btn-primary">
+    <a class="btn btn-lg btn-secondary" href="signupF2"> Done </a>
+
+</form>
+{% endblock %}
+
+<!--scripts block ------------------------------------------------------------>
+
+{% block script %}
+<script>
+    function remove(id) {
+        document.getElementById(id).remove();
+
+        //api request
+    }
+</script>
+{% endblock %}
