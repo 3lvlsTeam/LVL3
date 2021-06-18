@@ -7,15 +7,16 @@
 <!--style block-------------------------------------------------------------->
 {% block style%}
 <style>
-    body{
-        background: none;
-    }
     .clickabule{
         height: 50px;
         width: 50px;
         border: none;
         margin: 0;
         padding: 0; 
+    }
+    #can{
+        border:1px solid;
+        opacity: 1;
     }
 </style>
    
@@ -24,10 +25,9 @@
 <!-- body block-------------------------------------------------------------->
 {% block body %}
 <body onload="init()">
-    <canvas id="can" width="300" height="300" style="border:1px solid; " ></canvas>
-    <img id="canvasimg" style="position:absolute;top:10%;left:52%;">
+    <canvas id="can" width="300" height="300" ></canvas>
+    <img id="canvasimg" >
     <input type="button" value="save" id="btn" size="30" onclick="save()" >
-    <input type="button" value="clear" id="clr" size="23" onclick="erase()" >
 </body>
 
 {% endblock %}
@@ -44,7 +44,7 @@
         dot_flag = false;
 
     var x = "black",
-        y = 5;
+        y = 7;
     
     function init() {
         canvas = document.getElementById('can');
@@ -79,13 +79,7 @@
         ctx.closePath();
     }
     
-    function erase() {
-        var m = confirm("Want to clear");
-        if (m) {
-            ctx.clearRect(0, 0, w, h);
-            document.getElementById("canvasimg").style.display = "none";
-        }
-    }
+  
     
     function save() {
         document.getElementById("canvasimg").style.border = "2px solid";
