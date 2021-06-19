@@ -2,40 +2,73 @@
 
 <!-- title block------------------------------------------------------------>
 
-{% block title %} SignupF3 {% endblock %}
+{% block title %}
+LOG IN
+{% endblock %}
 
 <!--style block-------------------------------------------------------------->
 {% block style%}
 <style>
-    .clickabule{
-        height: 50px;
-        width: 50px;
-        border: none;
-        margin: 0;
-        padding: 0; 
+    .login_nav_a{   
+        font:bold;
+        color: black  !important;
     }
-    #can{
-        border:1px solid;
-        opacity: 1;
+    
+    #can_div{
+    background-image: url("{{directory}}/convesbackground.png") ;
+    background-repeat: no-repeat; 
+    background-size:contain;
+    max-width: 1200px;
+    overflow: hidden;
     }
+
 </style>
-   
 {% endblock %}
 
 <!-- body block-------------------------------------------------------------->
 {% block body %}
 <body onload="init()">
-    <canvas id="can" width="300" height="300" ></canvas>
-    <img id="canvasimg" >
-    <input type="button" value="save" id="btn" size="30" onclick="save()" >
-</body>
+    <form class="input_form" action="" method="POST"  width={{img_width}}>
+    <h2>Authentication level 3<samp style="font-size:medium; float:right" > Step 3</samp> </h2>
+    <hr>
+    <h5> Upload your image <a href="uploaderlvl3">Upload</a></h5>
+    <p> Then draw a pattern you can remember it!</p>
 
+
+    <div id="can_div" >
+        <canvas id="can"   width={{img_width}} height={{img_height}} ></canvas>
+        <img id="canvasimg" hidden >
+    </div>
+   
+    <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck" required>
+          <label class="form-check-label" for="gridCheck">
+        <p>I know & agree that this image and this pattern will be used the futrue to login in.</p>
+        </label>
+        </div>
+        <hr>
+      </div>
+
+      
+    <div class="buttons_div col-12">
+        <input type="submit" value="Save" class="btn btn-lg btn-primary" onclick="save()">
+        <input type="button" class="btn btn-secondary btn-lg" value="Refresh" onclick="refresh()">
+    </div>
+</form>
+</body>
 {% endblock %}
 
 <!--scripts block ------------------------------------------------------------>
 
 {% block script %}
+
 <script type="text/javascript">
+    
+    function refresh() {
+        location.reload();
+    }
+
     var canvas, ctx, flag = false,
         prevX = 0,
         currX = 0,
@@ -85,7 +118,6 @@
         document.getElementById("canvasimg").style.border = "2px solid";
         var dataURL = canvas.toDataURL();
         document.getElementById("canvasimg").src = dataURL;
-        document.getElementById("canvasimg").style.display = "inline";
     }
     
     function findxy(res, e) {

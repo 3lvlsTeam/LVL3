@@ -2,12 +2,13 @@ from ping3  import ping
 import random ,re,os
 from random import shuffle
 from flask import flash
+from PIL import Image
+import imagehash
+
 
 special_words = ['!', '@', '#', '$', '%', '^', '&','*', ':', '"', '?', '/', '(', ')', '+', '_']
 #---------------------------------------------------------------------------------------------------------------------------------------------------        
 
-def sanvdjsv():
-    pass
 class pw_maker():
         
     def password_maker(favourite_number,some_words):
@@ -82,3 +83,16 @@ class directory():
         img_list =  os.listdir(directory)
         shuffle(img_list)
         return img_list
+
+
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def hash_this_img(image):
+    new_image = Image.new("RGBA", image.size, "WHITE") 
+    new_image.paste(image, (0, 0), image)              
+    new_image.convert('RGB')
+    return imagehash.average_hash(new_image)  
