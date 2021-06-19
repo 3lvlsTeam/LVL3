@@ -12,7 +12,7 @@
         color: black !important;
     }
     #cbg_img{
-        max-width: 1200px;
+        max-width: 100%;
     }
 </style>
 {% endblock %}
@@ -20,13 +20,17 @@
 <!-- body block-------------------------------------------------------------->
 {% block body %}
 <form class="input_form" method="post" action="" enctype="multipart/form-data">
-    <h2> second level authentication <samp style="font-size:medium; float:right">Uploading Custom images</samp></h2>
+    <h2> second level authentication <samp style="font-size:medium; float:right">Uploading Custom image</samp></h2>
     <hr>
-        <img id="cbg_img" src="{{directory}}/convesbackground.png"  >
     <h4>Select an image to upload</h4>
-    <input type="file" name="file" class="form-control" required>
-    <br><input type="submit" value="Upload" class="btn btn-lg btn-primary">
-    <a class="btn btn-lg btn-secondary" href="signupF3"> Next </a>
+    <div class="input-group mb-3">
+        <input type="file" name="file" class="form-control" required>
+        <button  type="submit" class="btn btn-outline-primary" type="button"  >Upload </button>
+      </div>  
+    <img id="cbg_img" src="/{{directory}}/convesbackground.png"  >
+    <hr>
+
+    <a class="btn btn-lg btn-primary" href="signupF3"> Confirm image </a>
 
 </form>
 {% endblock %}
@@ -35,10 +39,5 @@
 
 {% block script %}
 <script>
-    function remove(id) {
-        document.getElementById(id).remove();
-
-        //api request
-    }
 </script>
 {% endblock %}

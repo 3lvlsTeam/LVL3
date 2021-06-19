@@ -3,7 +3,7 @@
 <!-- title block------------------------------------------------------------>
 
 {% block title %}
-LOG IN
+LOG IN LVL 3
 {% endblock %}
 
 <!--style block-------------------------------------------------------------->
@@ -13,27 +13,41 @@ LOG IN
         font:bold;
         color: black  !important;
     }
-    
-    #can{
-        border:1px solid;
-        opacity: 1;
+
+    #can_div{
+    background-image: url("{{directory}}/convesbackground.png") ;
+    width:fit-content;
     }
+    #can{
+        opacity: 0;
+    }
+
+
 </style>
 {% endblock %}
 
 <!-- body block-------------------------------------------------------------->
 {% block body %}
 <body onload="init()">
-<form class="input_form" action="" method="POST">
-    <h2>Login<samp style="font-size:medium; float:right" >Step 3</samp></h2>
+    <form class="input_form" action="" method="POST"  width={{img_width}}>
+    <h2>Authentication level 3<samp style="font-size:medium; float:right" > Step 3</samp> </h2>
     <hr>
-    <br>
-    <div>
-        <canvas id="can" width="300" height="300" ></canvas>
-        <img id="canvasimg" >
-        <input type="button" value="save" id="btn" size="30" onclick="save()" >
+    <p>Draw the same pattern you made in signing up!</p>
+
+
+    <div id="can_div" >
+        <canvas id="can" width="{{img_width}}" height="{{img_height}}"></canvas>
     </div>
+
+    
+    <hr>
    
+
+    <div class="buttons_div col-12 float-right">
+        <input style="visibility: hidden;" type="password" id="img_src" name="img_src"> 
+        <input type="submit" class="btn btn-lg btn-primary" onclick="save()">
+        <input type="button" class="btn btn-secondary btn-lg" value="Refresh" onclick="refresh()">
+    </div>
 </form>
 </body>
 {% endblock %}
@@ -43,6 +57,11 @@ LOG IN
 {% block script %}
 
 <script type="text/javascript">
+    
+    function refresh() {
+        location.reload();
+    }
+
     var canvas, ctx, flag = false,
         prevX = 0,
         currX = 0,
@@ -72,10 +91,7 @@ LOG IN
             findxy('out', e)
         }, false);
     }
-    
-    
-    
-    
+ 
     function draw() {
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
@@ -85,22 +101,13 @@ LOG IN
         ctx.stroke();
         ctx.closePath();
     }
-    
-  
-    
-    function save() {
-        document.getElementById("canvasimg").style.border = "2px solid";
-        var dataURL = canvas.toDataURL();
-        document.getElementById("canvasimg").src = dataURL;
-        document.getElementById("canvasimg").style.display = "inline";
-    }
-    
+   
     function findxy(res, e) {
         if (res == 'down') {
             prevX = currX;
             prevY = currY;
-            currX = e.clientX - canvas.offsetLeft;
-            currY = e.clientY - canvas.offsetTop;
+            currX = e.clientX - canvas.getBoundingClientRect().left;
+            currY = e.clientY - canvas.getBoundingClientRect().top;
     
             flag = true;
             dot_flag = true;
@@ -119,11 +126,16 @@ LOG IN
             if (flag) {
                 prevX = currX;
                 prevY = currY;
-                currX = e.clientX - canvas.offsetLeft;
-                currY = e.clientY - canvas.offsetTop;
+                currX = e.clientX - canvas.getBoundingClientRect().left;
+                currY = e.clientY - canvas.getBoundingClientRect().top;
                 draw();
             }
         }
     }
+    function save() {
+        var dataURL = canvas.toDataURL();
+        document.getElementById("img_src").value = dataURL;
+    };
+    
     </script>
 {% endblock%}

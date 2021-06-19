@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import urllib.request
 from codes import functions
 from PIL import Image
+from imagehash import hex_to_hash
 
 #------------------------------------------------------------------------------------------------------------------------------
 
@@ -94,8 +95,8 @@ def loged_lvl_3():
         if session['lvl3']==True:return True
     except:pass
     try:
-        hashimg = functions.hash_this_img(session["hashed_img"])
-        if usr.hashed_img-hashimg < 4:
+        flash(hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]))
+        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 4:
             session['lvl3']=True
             return True
     except:pass
@@ -219,24 +220,21 @@ def signupF2():
 def signupF3():
     make_tmp_usr()
     if request.method == "POST":
-        session["hashed_img"]=request.form.get["canvasimg"]
-        hashed_img=functions.hash_this_img(session['hashed_img'])
-        if hashed_img > 0000000000000000:
-            usr.img_password=functions.hash_this_img(session['hashed_img'])
+        session['hashed_img']=str(functions.hash_this_img(request.form["img_src"]))
+        if session['hashed_img'] != '0000000000000000':
+            usr.hashed_img=session['hashed_img']
             db.session.commit()
             flash('Done!')
-            return redirect(url_for("signupF3"))
-        else:flash("You have to make a make on the photo!!")
-
+            return redirect(url_for("login"))
+        else:flash("You have to draw on the photo!!")
 
     directory="static/images/"+str(usr.id)+"_cbg"
     if not os.path.exists(directory):
             os.makedirs(directory)
     try:
         img=Image.open(directory+"/convesbackground.png")
-
     except:
-        flash("No image was upodead!")
+        flash("No image was upodead yet!")
         return render_template("signupF3.html",usr=usr,img_height=0,img_width=0)
     return render_template("signupF3.html",usr=usr,img_height=img.height,img_width=img.width,directory=directory)
 #------------------------------------------------------------------------------------------------------------------------------
@@ -279,11 +277,14 @@ def uploaderlvl3():
         return redirect(url_for("login"))
     directory="static/images/"+str(usr.id)+"_cbg"
     if request.method=="POST":
-        try:os.remove(directory+"/convesbackground.png")
-        except:pass
         file = request.files.get('file')
         if file and functions.allowed_file(file.filename):
             file.save(os.path.join(directory,"convesbackground.png"))
+            img=Image.open(directory+"/convesbackground.png")
+            if img.width > 1000 or img.height>1000:
+                flash("img size was too big, we adjusted it.")
+                img.thumbnail((1000,1000))
+                img.save(directory+"/convesbackground.png")
         else:
             flash('Allowed image types are - png, jpg, jpeg, gif')      
         return redirect(url_for('uploaderlvl3'))
@@ -359,18 +360,21 @@ def loginF3():
         if usr.hashed_img == None:
             flash("Pleas Fnish Signing Up First!")
             return redirect(url_for("signupF3"))
-    
-    if request.method=="POST":
-        session["hashed_img"]=request.form["hashed_img"]
-        if loged_lvl_3():
-            flash("level 3 is passed !")
-            return redirect(url_for("home") )
-        else:
-            flash("wrong pattern, pleas try again!")
-    return render_template("loginF3.html",usr=usr)
-    # else:
-    #     flash("Finsh loging in level 2 first !")
-    #     return redirect(url_for("loginF2") )
+        
+        if request.method=="POST":
+            session['hashed_img']=str(functions.hash_this_img(request.form["img_src"]))
+            if loged_lvl_3():
+                flash("level 3 is passed !")
+                return redirect(url_for("home") )
+            else:
+                flash("wrong pattern, pleas try again!")
+
+        directory="static/images/"+str(usr.id)+"_cbg"
+        img=Image.open(directory+"/convesbackground.png")
+        return render_template("loginF3.html",usr=usr,img_height=img.height,img_width=img.width,directory=directory)
+    else:
+        flash("Finsh loging in level 2 first !")
+        return redirect(url_for("loginF2") )
 #-------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -382,7 +386,7 @@ def home():
     if loged_lvl_1() and loged_lvl_2() and loged_lvl_3():
         return render_template("home.html", usr=usr)
     else:
-        flash("You r not loged in!")
+        flash("You r not loged in yet!")
         return redirect(url_for("login"))
 #------------------------------------------------------------------------------------------------------------------------------
 

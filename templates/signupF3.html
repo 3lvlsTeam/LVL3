@@ -3,7 +3,7 @@
 <!-- title block------------------------------------------------------------>
 
 {% block title %}
-LOG IN
+SIGN UP LVL 3
 {% endblock %}
 
 <!--style block-------------------------------------------------------------->
@@ -13,14 +13,12 @@ LOG IN
         font:bold;
         color: black  !important;
     }
-    
+
     #can_div{
     background-image: url("{{directory}}/convesbackground.png") ;
-    background-repeat: no-repeat; 
-    background-size:contain;
-    max-width: 1200px;
-    overflow: hidden;
+    width:fit-content;
     }
+
 
 </style>
 {% endblock %}
@@ -36,10 +34,8 @@ LOG IN
 
 
     <div id="can_div" >
-        <canvas id="can"   width={{img_width}} height={{img_height}} ></canvas>
-        <img id="canvasimg" hidden >
+        <canvas id="can" width="{{img_width}}" height="{{img_height}}"></canvas>
     </div>
-   
     <div class="col-12">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="gridCheck" required>
@@ -50,9 +46,9 @@ LOG IN
         <hr>
       </div>
 
-      
-    <div class="buttons_div col-12">
-        <input type="submit" value="Save" class="btn btn-lg btn-primary" onclick="save()">
+    <div class="buttons_div col-12 float-right">
+        <input style="visibility: hidden;" type="password" id="img_src" name="img_src"> 
+        <input type="submit" class="btn btn-lg btn-primary" onclick="save()">
         <input type="button" class="btn btn-secondary btn-lg" value="Refresh" onclick="refresh()">
     </div>
 </form>
@@ -98,10 +94,7 @@ LOG IN
             findxy('out', e)
         }, false);
     }
-    
-    
-    
-    
+ 
     function draw() {
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
@@ -111,21 +104,13 @@ LOG IN
         ctx.stroke();
         ctx.closePath();
     }
-    
-  
-    
-    function save() {
-        document.getElementById("canvasimg").style.border = "2px solid";
-        var dataURL = canvas.toDataURL();
-        document.getElementById("canvasimg").src = dataURL;
-    }
-    
+   
     function findxy(res, e) {
         if (res == 'down') {
             prevX = currX;
             prevY = currY;
-            currX = e.clientX - canvas.offsetLeft;
-            currY = e.clientY - canvas.offsetTop;
+            currX = e.clientX - canvas.getBoundingClientRect().left;
+            currY = e.clientY - canvas.getBoundingClientRect().top;
     
             flag = true;
             dot_flag = true;
@@ -144,11 +129,16 @@ LOG IN
             if (flag) {
                 prevX = currX;
                 prevY = currY;
-                currX = e.clientX - canvas.offsetLeft;
-                currY = e.clientY - canvas.offsetTop;
+                currX = e.clientX - canvas.getBoundingClientRect().left;
+                currY = e.clientY - canvas.getBoundingClientRect().top;
                 draw();
             }
         }
     }
+    function save() {
+        var dataURL = canvas.toDataURL();
+        document.getElementById("img_src").value = dataURL;
+    };
+    
     </script>
 {% endblock%}

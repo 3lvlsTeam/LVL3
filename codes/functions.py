@@ -4,6 +4,8 @@ from random import shuffle
 from flask import flash
 from PIL import Image
 import imagehash
+import urllib.request
+
 
 
 special_words = ['!', '@', '#', '$', '%', '^', '&','*', ':', '"', '?', '/', '(', ')', '+', '_']
@@ -91,8 +93,11 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def hash_this_img(image):
+def hash_this_img(src):
+    urllib.request.urlretrieve(src,"tmpimg.png")
+    image = Image.open("tmpimg.png")
     new_image = Image.new("RGBA", image.size, "WHITE") 
     new_image.paste(image, (0, 0), image)              
     new_image.convert('RGB')
+    os.remove("tmpimg.png")
     return imagehash.average_hash(new_image)  
