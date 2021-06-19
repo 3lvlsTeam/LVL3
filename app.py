@@ -60,6 +60,9 @@ class users(db.Model):
 #------  some functions  -------------------------------------------------------------------------------------------------------
 
 def make_tmp_usr():
+    try: 
+        if usr:return True
+    except:pass
     try:
         global usr
         usr = users.query.filter_by(username=session["username"]).first()
@@ -95,7 +98,6 @@ def loged_lvl_3():
         if session['lvl3']==True:return True
     except:pass
     try:
-        flash(hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]))
         if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 4:
             session['lvl3']=True
             return True
@@ -110,7 +112,7 @@ def loged_lvl_3():
 #-- main function -------------------------------------------------------------------------------------------------------------
 @app.route("/")
 def main():
-    return redirect(url_for("home"))
+    return redirect(url_for("login"))
 #------------------------------------------------------------------------------------------------------------------------------
     
 
@@ -180,7 +182,6 @@ def signup():
 #--- pwget function ------------------------------------------------------------------------------------------------------------
 @app.route("/pwgen",methods=["POST","GET"] )
 def pwgen():
-    
     if request.method == "POST":
         input_gen_numbers = request.form["input_gen_numbers"]
         input_gen_text = request.form["input_gen_text"]
@@ -298,7 +299,6 @@ def uploaderlvl3():
 def login():
     if loged_lvl_1():
         flash("level 1 is passed! ")
-        make_tmp_usr()
         return redirect(url_for("loginF2") )
     
     if request.method=="POST":
@@ -323,9 +323,9 @@ def login():
 #--- loginF2 function ----------------------------------------------------------------------------------------------------------
 @app.route('/loginF2', methods=['GET', 'POST'])
 def loginF2():
+    make_tmp_usr()
     if loged_lvl_2():
         flash("level 2 is passed! ")
-        make_tmp_usr()
         return redirect(url_for("loginF3") )
     if loged_lvl_1():       
         if usr.img_password == None:
@@ -353,6 +353,7 @@ def loginF2():
 #--- loginF3 function ----------------------------------------------------------------------------------------------------------
 @app.route('/loginF3', methods=['GET', 'POST'])
 def loginF3():
+    make_tmp_usr()
     if loged_lvl_3():
             flash("level 3 is passed !")
             return redirect(url_for("home") )
