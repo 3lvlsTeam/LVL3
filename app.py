@@ -220,6 +220,7 @@ def signupF2():
 @app.route("/signupF3",methods=["POST","GET"])
 def signupF3():
     make_tmp_usr()
+    flash("if the image didnt change use CTRL+F5 ")
     if request.method == "POST":
         session['hashed_img']=str(functions.hash_this_img(request.form["img_src"]))
         if session['hashed_img'] != '0000000000000000':
@@ -286,6 +287,7 @@ def uploaderlvl3():
                 flash("img size was too big, we adjusted it.")
                 img.thumbnail((1000,1000))
                 img.save(directory+"/convesbackground.png")
+                flash("if the image didnt change use CTRL+F5 ")
         else:
             flash('Allowed image types are - png, jpg, jpeg, gif')      
         return redirect(url_for('uploaderlvl3'))
