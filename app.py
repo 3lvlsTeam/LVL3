@@ -62,7 +62,7 @@ class users(db.Model):
 def make_tmp_usr():
   
     try:
-        if session["tmp_usr"]:return True
+       
         global usr
         usr = users.query.filter_by(username=session["username"]).first()
         session["tmp_usr"]=True
