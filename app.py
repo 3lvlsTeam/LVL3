@@ -60,12 +60,12 @@ class users(db.Model):
 #------  some functions  -------------------------------------------------------------------------------------------------------
 
 def make_tmp_usr():
-    try: 
-        if usr:return True
-    except:pass
+  
     try:
+        if session["tmp_usr"]:return True
         global usr
         usr = users.query.filter_by(username=session["username"]).first()
+        session["tmp_usr"]=True
         return usr
     except:pass
     return False
