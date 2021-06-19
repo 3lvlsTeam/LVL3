@@ -30,7 +30,7 @@ LOG IN LVL 3
 {% block body %}
 <body onload="init()">
     <form class="input_form" action="" method="POST"  width={{img_width}}>
-    <h2>Authentication level 3<samp style="font-size:medium; float:right" > Step 3</samp> </h2>
+    <h2>Authentication level 3<samp style="font-size:medium; float:right" >Authentication level 3</samp> </h2>
     <hr>
     <p>Draw the same pattern you made in signing up!</p>
 
@@ -45,7 +45,7 @@ LOG IN LVL 3
 
     <div class="buttons_div col-12 float-right">
         <input style="visibility: hidden;" type="password" id="img_src" name="img_src"> 
-        <input type="submit" class="btn btn-lg btn-primary" onclick="save()">
+        <input type="submit" value="Login" class="btn btn-lg btn-primary" onclick="save()">
         <input type="button" class="btn btn-secondary btn-lg" value="Refresh" onclick="refresh()">
     </div>
 </form>

@@ -3,7 +3,7 @@
 <!-- title block------------------------------------------------------------>
 
 {% block title %}
-SIGN UP LVL 3
+SIGN UP step 3
 {% endblock %}
 
 <!--style block-------------------------------------------------------------->
@@ -27,7 +27,7 @@ SIGN UP LVL 3
 {% block body %}
 <body onload="init()">
     <form class="input_form" action="" method="POST"  width={{img_width}}>
-    <h2>Authentication level 3<samp style="font-size:medium; float:right" > Step 3</samp> </h2>
+    <h2>Sign up <samp style="font-size:medium; float:right" > Authentication level 3</samp> </h2>
     <hr>
     <h5> Upload your image <a href="uploaderlvl3">Upload</a></h5>
     <p> Then draw a pattern you can remember it!</p>
@@ -48,7 +48,7 @@ SIGN UP LVL 3
 
     <div class="buttons_div col-12 float-right">
         <input style="visibility: hidden;" type="password" id="img_src" name="img_src"> 
-        <input type="submit" class="btn btn-lg btn-primary" onclick="save()">
+        <input type="submit" value="Sign in" class="btn btn-lg btn-primary" onclick="save()">
         <input type="button" class="btn btn-secondary btn-lg" value="Refresh" onclick="refresh()">
     </div>
 </form>
