@@ -23,7 +23,7 @@
     <p>hint:If you want to remove an image press on it</p>
     <div class="imgs_div">
         {%for i in imgs_list:%}
-        <div onclick="remove('{{i}}')" id="{{i}}" style="background-image: url({{directory}}/{{i}});" class="img_button">
+        <div onclick="remove('{{i}}')" id="{{i}}" style="background-image: url({{directory}}/{{i}}); float:right" class="img_button">
             <div class="close">X</div>
         </div> {%endfor%}
     </div>

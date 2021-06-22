@@ -76,7 +76,7 @@ def loged_lvl_1():
         if session['lvl1']==True:return True
     except:pass
     try:
-        if bcrypt.checkpw(session["password_log"],usr.user_password):
+        if bcrypt.checkpw(session["password"],usr.user_password):
             session['lvl1']=True
             return True
     except:pass
@@ -87,7 +87,7 @@ def loged_lvl_2():
         if session['lvl2']==True:return True
     except:pass
     try:
-        if bcrypt.checkpw(session["img_password_log"],usr.img_password):
+        if bcrypt.checkpw(session["img_password"],usr.img_password):
             session['lvl2']=True
             return True
     except:pass
@@ -98,8 +98,8 @@ def loged_lvl_3():
         if session['lvl3']==True:return True
     except:pass
     try:
-        flash(hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img_log"]))
-        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img_log"]) < 0:
+        flash(hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]))
+        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 0:
             session['lvl3']=True
             return True
     except:pass
@@ -113,6 +113,7 @@ def loged_lvl_3():
 #-- main function -------------------------------------------------------------------------------------------------------------
 @app.route("/")
 def main():
+    
     return redirect(url_for("login"))
 #------------------------------------------------------------------------------------------------------------------------------
     
@@ -229,6 +230,7 @@ def signupF3():
             usr.hashed_img=session['hashed_img']
             db.session.commit()
             flash('Done!')
+            session.clear()
             return redirect(url_for("login"))
         else:flash("You have to draw on the photo!!")
 
@@ -248,7 +250,7 @@ def signupF3():
 @app.route('/uploader', methods=["POST","GET"])
 def uploader():
     make_tmp_usr()
-    if not bcrypt.checkpw(session["password"],usr.user_password):
+    if not loged_lvl_1():
         return redirect(url_for("login"))
     directory="static/images/"+str(usr.id)
     img_list=os.listdir(directory)
@@ -264,6 +266,9 @@ def uploader():
             if file and functions.allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(directory, filename))
+                img=Image.open(directory+"/"+filename)
+                img.thumbnail((150,150))
+                img.save(directory+"/"+filename)
             else:
                 flash('Allowed image types are - png, jpg, jpeg, gif')      
         return redirect(url_for('uploader'))
@@ -308,7 +313,7 @@ def login():
     if request.method=="POST":
         session.clear()
         session["username"]=request.form["username"]
-        session["password_log"]=request.form["password"].encode("utf-8")
+        session["password"]=request.form["password"].encode("utf-8")
         
         if make_tmp_usr():
             if loged_lvl_1():
@@ -337,7 +342,7 @@ def loginF2():
             return redirect(url_for("signupF2"))
 
         if request.method=="POST":
-            session["img_password_log"]=request.form["img_password"].encode("utf-8")
+            session["img_password"]=request.form["img_password"].encode("utf-8")
             if loged_lvl_2():
                 flash("level 2 is passed! ")
                 return redirect(url_for("loginF3") )
@@ -367,7 +372,7 @@ def loginF3():
             return redirect(url_for("signupF3"))
         
         if request.method=="POST":
-            session['hashed_img_log']=str(functions.hash_this_img(request.form["img_src"]))
+            session['hashed_img']=str(functions.hash_this_img(request.form["img_src"]))
             if loged_lvl_3():
                 flash("level 3 is passed !")
                 return redirect(url_for("home") )
