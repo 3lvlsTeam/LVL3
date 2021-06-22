@@ -24,8 +24,8 @@ LOG IN LVL 2
     <h4>Click the photos in the right order :</h4>
     <br>
     <div class="imgs_div">
-        {%for i in imgs_list:%}
-            <input style="background-image: url({{directory}}/{{i}});" class="img_button" id="{{i}}" type="button" value=" " onclick="give_numper('{{i}}')" >
+        {%for img_name in imgs_list:%}
+            <input style="background-image: url({{directory}}/{{img_name}});" class="img_button" id="{{img_name}}" type="button" value=" " onclick="give_numper('{{img_name}}')" >
         {%endfor%}
     </div>
     <br><hr><br>

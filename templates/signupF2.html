@@ -26,8 +26,9 @@
     <p> Then Select the order so you can remember it!</p>
     <br>
     <div class="imgs_div">
-        {%for i in imgs_list:%}
-        <input style="background-image: url({{directory}}/{{i}});" class="img_button" id="{{i}}" type="button" value=" " onclick="give_numper('{{i}}')"> {%endfor%}
+        {%for img_name in imgs_list:%}
+        <input style="background-image: url({{directory}}/{{img_name}});" class="img_button" id="{{img_name}}" type="button" value=" " onclick="give_numper('{{img_name}}')">
+        {%endfor%}
     </div>
 
 

@@ -60,19 +60,19 @@ class users(db.Model):
 #------  some functions  -------------------------------------------------------------------------------------------------------
 
 def make_tmp_usr():
-  
     try:
-       
         global usr
         usr = users.query.filter_by(username=session["username"]).first()
-        session["tmp_usr"]=True
         return usr
     except:pass
     return False
-
+def delete_tmp_usr():
+    try:
+        global usr
+        usr=None
+    except:pass
 
 def loged_lvl_1():
-
     try:
         if bcrypt.checkpw(session["password"],usr.user_password):
             return True
@@ -81,23 +81,14 @@ def loged_lvl_1():
 
 def loged_lvl_2():
     try:
-        if session['lvl2']==True:return True
-    except:pass
-    try:
         if bcrypt.checkpw(session["img_password"],usr.img_password):
-            session['lvl2']=True
             return True
     except:pass
     return False
 
 def loged_lvl_3():
     try:
-        if session['lvl3']==True:return True
-    except:pass
-    try:
-        flash(hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]))
-        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 0:
-            session['lvl3']=True
+        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 3:
             return True
     except:pass
     return False
@@ -167,6 +158,7 @@ def signup():
             newuser=users(session["firstname"],session["lastname"],session["username"],session["useremail"],session["birthdate"],session["password_crybted"],datetime.now(),None,None)
             db.session.add(newuser)
             db.session.commit()
+            make_tmp_usr()
             return redirect(url_for("signupF2"))
         
 
@@ -197,11 +189,20 @@ def pwgen():
 #---- signup 2 function ----------------------------------------------------------------------------------------------------------
 @app.route("/signupF2",methods=["POST","GET"])
 def signupF2():   
-    make_tmp_usr()
+    if not loged_lvl_1():
+        flash("finsh sign up in level 1 first !")
+        return redirect(url_for('login'))
+    if usr.img_password !=  None:
+        if loged_lvl_2():
+            pass
+        else:
+            flash("finsh loging in level 2 first !")
+            return redirect(url_for('login'))
     if request.method == "POST":
         session["img_password"]=request.form["img_password"]
         if session['img_password'].count(".")>4:
             session["img_password"]=session["img_password"].encode("utf-8")
+            make_tmp_usr()
             usr.img_password=bcrypt.hashpw(session["img_password"],bcrypt.gensalt())
             db.session.commit()
             flash('Done!')
@@ -210,6 +211,7 @@ def signupF2():
     directory=functions.directory.directory_maker(usr.id)
     img_list= functions.directory.directory_scaner(directory)
     return render_template("signupF2.html", imgs_list =img_list,directory=directory ,usr=usr)
+      
 #------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -217,12 +219,21 @@ def signupF2():
 #---- signup 3 function ----------------------------------------------------------------------------------------------------------
 @app.route("/signupF3",methods=["POST","GET"])
 def signupF3():
-    make_tmp_usr()
-    flash("if the image didnt change use CTRL+F5 ")
+    if not loged_lvl_2():
+        flash("finsh sign up in level 2 first!")
+        return redirect(url_for('login'))
+    if usr.hashed_img != None:
+        if loged_lvl_3():
+            pass
+        else:
+            flash("finsh loging in level 3 first !")
+            return redirect(url_for('login'))
+    flash("NOTE: If the image didnt change use CTRL+F5 ")
     if request.method == "POST":
         session['hashed_img']=str(functions.hash_this_img(request.form["img_src"]))
         flash(session["hashed_img"])
         if session['hashed_img'] != '0000000000000000':
+            make_tmp_usr()
             usr.hashed_img=session['hashed_img']
             db.session.commit()
             flash('Done!')
@@ -239,15 +250,22 @@ def signupF3():
         flash("No image was upodead yet!")
         return render_template("signupF3.html",usr=usr,img_height=0,img_width=0)
     return render_template("signupF3.html",usr=usr,img_height=img.height,img_width=img.width,directory=directory)
+
+       
 #------------------------------------------------------------------------------------------------------------------------------
 
 
 #---- uploader function --------------------------------------------------------------------------------------------------------
 @app.route('/uploader', methods=["POST","GET"])
 def uploader():
-    make_tmp_usr()
     if not loged_lvl_1():
         return redirect(url_for("login"))
+    if usr.img_password != None:
+        if loged_lvl_2():
+            pass
+        else:
+            flash("finsh loging in level 2 first !")
+            return redirect(url_for('loginF2'))
     directory="static/images/"+str(usr.id)
     img_list=os.listdir(directory)
     if len(img_list)<5:
@@ -277,9 +295,15 @@ def uploader():
 #---- uploader lvl3 function --------------------------------------------------------------------------------------------------------
 @app.route('/uploaderlvl3', methods=["POST","GET"])
 def uploaderlvl3():
-    make_tmp_usr()
     if not loged_lvl_2():
-        return redirect(url_for("login"))
+        flash("finsh sign up in level 2 first!")
+        return redirect(url_for('signupF2'))
+    if usr.hashed_img != None:
+        if loged_lvl_3():
+            pass
+        else:
+            flash("finsh loging in level 3 first !")
+            return redirect(url_for('loginF3'))
     directory="static/images/"+str(usr.id)+"_cbg"
     if request.method=="POST":
         file = request.files.get('file')
@@ -305,12 +329,11 @@ def login():
     if loged_lvl_1():
         flash("level 1 is passed! ")
         return redirect(url_for("loginF2") )
-    
     if request.method=="POST":
         session.clear()
         session["username"]=request.form["username"]
         session["password"]=request.form["password"].encode("utf-8")
-        
+
         if make_tmp_usr():
             if loged_lvl_1():
                 flash("level 1 is passed! ")
@@ -328,12 +351,11 @@ def login():
 #--- loginF2 function ----------------------------------------------------------------------------------------------------------
 @app.route('/loginF2', methods=['GET', 'POST'])
 def loginF2():
-    make_tmp_usr()
     if loged_lvl_2():
         flash("level 2 is passed! ")
         return redirect(url_for("loginF3") )
     if loged_lvl_1():       
-        if usr.img_password:
+        if usr.img_password == None:
             flash("Pleas Fnish Signing Up First!")
             return redirect(url_for("signupF2"))
 
@@ -358,12 +380,11 @@ def loginF2():
 #--- loginF3 function ----------------------------------------------------------------------------------------------------------
 @app.route('/loginF3', methods=['GET', 'POST'])
 def loginF3():
-    make_tmp_usr()
     if loged_lvl_3():
             flash("level 3 is passed !")
             return redirect(url_for("home") )
     if loged_lvl_2() :       
-        if usr.hashed_img:
+        if usr.hashed_img == None:
             flash("Pleas Fnish Signing Up First!")
             return redirect(url_for("signupF3"))
         
@@ -413,6 +434,7 @@ def profile():
 @app.route("/logout")
 def logout():
     session.clear()
+    delete_tmp_usr()
     flash("you just loged out")
     return redirect(url_for("main"))
 #------------------------------------------------------------------------------------------------------------------------------
