@@ -72,12 +72,9 @@ def make_tmp_usr():
 
 
 def loged_lvl_1():
-    try:
-        if session['lvl1']==True:return True
-    except:pass
+
     try:
         if bcrypt.checkpw(session["password"],usr.user_password):
-            session['lvl1']=True
             return True
     except:pass
     return False
@@ -113,7 +110,6 @@ def loged_lvl_3():
 #-- main function -------------------------------------------------------------------------------------------------------------
 @app.route("/")
 def main():
-    
     return redirect(url_for("login"))
 #------------------------------------------------------------------------------------------------------------------------------
     
@@ -337,7 +333,7 @@ def loginF2():
         flash("level 2 is passed! ")
         return redirect(url_for("loginF3") )
     if loged_lvl_1():       
-        if usr.img_password == None:
+        if usr.img_password:
             flash("Pleas Fnish Signing Up First!")
             return redirect(url_for("signupF2"))
 
@@ -367,7 +363,7 @@ def loginF3():
             flash("level 3 is passed !")
             return redirect(url_for("home") )
     if loged_lvl_2() :       
-        if usr.hashed_img == None:
+        if usr.hashed_img:
             flash("Pleas Fnish Signing Up First!")
             return redirect(url_for("signupF3"))
         
