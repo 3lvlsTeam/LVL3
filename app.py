@@ -5,6 +5,7 @@ from flask import Flask , redirect, url_for, render_template,request,flash
 from flask.globals import session
 from datetime import datetime, timedelta , date
 from flask_sqlalchemy import SQLAlchemy
+import flask_sqlalchemy
 from werkzeug.utils import secure_filename
 import urllib.request
 from codes import functions
@@ -88,7 +89,7 @@ def loged_lvl_2():
 
 def loged_lvl_3():
     try:
-        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 3:
+        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 2:
             return True
     except:pass
     return False
@@ -392,7 +393,7 @@ def loginF3():
             session['hashed_img']=str(functions.hash_this_img(request.form["img_src"]))
             if loged_lvl_3():
                 flash("level 3 is passed !")
-                return redirect(url_for("home") )
+                return redirect(url_for("home"))
             else:
                 flash("wrong pattern, pleas try again!")
 
