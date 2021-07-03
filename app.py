@@ -311,7 +311,7 @@ def uploaderlvl3():
         if file and functions.allowed_file(file.filename):
             file.save(os.path.join(directory,"convesbackground.png"))
             img=Image.open(directory+"/convesbackground.png")
-            if img.width > 1000 or img.height>1000:
+            if img.width != 1000 or img.height != 1000:
                 flash("img size was too big, we adjusted it.")
                 img.thumbnail((1000,1000))
                 img.save(directory+"/convesbackground.png")
