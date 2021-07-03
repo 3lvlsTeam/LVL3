@@ -89,7 +89,7 @@ def loged_lvl_2():
 
 def loged_lvl_3():
     try:
-        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 2:
+        if hex_to_hash(usr.hashed_img)-hex_to_hash(session["hashed_img"]) < 1:
             return True
     except:pass
     return False
@@ -279,7 +279,7 @@ def uploader():
         print(files)
         for file in files:
             if file and functions.allowed_file(file.filename):
-                filename = secure_filename(file.filename)
+                filename = str(len(os.listdir(directory)))+".png"
                 file.save(os.path.join(directory, filename))
                 img=Image.open(directory+"/"+filename)
                 img.thumbnail((150,150))
