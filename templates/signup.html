@@ -45,14 +45,20 @@
         <label for="input_username" class="form-label">Username</label>
         <div class="input-group">
             <div class="input-group-text">@</div>
-            <input type="text" class="form-control" id="input_username" required name="input_username">
+            <input type="text" class="form-control" id="input_username" required name="input_username" pattern="[A-Za-z0-9]+">
+            <div class="invalid-feedback">
+                Must be letters and numbers only
+            </div>
         </div>
     </div>
 
     <div class="col-12">
         <label for="input_email" class="form-label">Email Address</label>
         <div class="input-group">
-            <input type="email" class="form-control" id="input_email" required name="input_email">
+            <input type="email" class="form-control" id="input_email" required name="input_email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+            <div class="invalid-feedback">
+                invalid email
+            </div>
         </div>
     </div>
     </div>
@@ -60,22 +66,28 @@
     <div class="col-12">
         <label for="input_birthdate" class="form-label">Birth date</label>
         <div class="input-group">
-            <input type="date" class="form-control" id="input_birthdate" min="1900-01-01" required name="input_birthdate">
+            <input type="date" class="form-control" id="input_birthdate" min="1900-01-01" max="2003-01-01" required name="input_birthdate">
+            <div class="invalid-feedback">
+                Must be above 18
+            </div>
         </div>
     </div>
     </div>
 
     <div class="col-md-6">
         <label for="input_password1" class="form-label">Password</label>
-        <input type="password" class="form-control" name="input_password1" id="input_password1" minlength="12" required>
+        <input type="password" class="form-control" name="input_password1" id="input_password1" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{12,24}" required>
         <div class="invalid-feedback">
-            Must be at lest 12 letters
+            Must be at least 12 letters and contain 1 uppercase, lowercase, number and symbol
         </div>
     </div>
 
     <div class="col-md-6">
         <label for="input_password2" class="form-label">Confirm password</label>
-        <input type="password" class="form-control" id="input_password2" name="input_password2" minlength="12" required>
+        <input type="password" class="form-control" id="input_password2" name="input_password2" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{12,24}" required>
+        <div class="invalid-feedback">
+            Must be the same password
+        </div>
     </div>
 
     <div class="col-12">
@@ -142,6 +154,21 @@
 
 
     })()
+</script>
+<script>
+    var input_password1 = document.getElementById("input_password1"),
+        input_password2 = document.getElementById("input_password2");
+
+    function validatePassword() {
+        if (input_password1.value != input_password2.value) {
+            input_password2.setCustomValidity("Password Don't Match");
+        } else {
+            input_password2.setCustomValidity('');
+        }
+    }
+
+    input_password1.onchange = validatePassword;
+    input_password2.onkeyup = validatePassword;
 </script>
 
 {% endblock%}

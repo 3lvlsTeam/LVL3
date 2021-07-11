@@ -79,7 +79,7 @@ class directory():
             os.makedirs(directory)
         img_list =  os.listdir(directory)
         if len(img_list) <5:
-            flash(" u need 2 upload 5 photos at lest !!")
+            flash(" you need to upload five photos at least !!")
         return directory
     def directory_scaner(directory):
         img_list =  os.listdir(directory)
