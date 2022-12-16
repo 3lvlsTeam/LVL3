@@ -1,0 +1,1 @@
+pip install bcrypt ,flask, flask_sqlalchemy,ping3,pillow,imagehash
